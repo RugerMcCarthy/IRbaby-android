@@ -28,6 +28,5 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-         name: Package
-         path: app/build/outputs/apk/release/
-         retention-days: 2
+         name: app-release.apk
+         path: app/build/outputs/apk/release/app-release.apk
