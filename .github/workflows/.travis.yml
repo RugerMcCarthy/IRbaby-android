@@ -28,6 +28,6 @@ jobs:
 
       - uses: actions/upload-artifact@v2
         with:
-          name: upload-apk
-          path: |
-            ${{github.workspace}}/app/build/outputs/apk/ir/release/*.apk
+         name: Package
+         path: app/build/outputs/apk/release/
+         retention-days: 2
