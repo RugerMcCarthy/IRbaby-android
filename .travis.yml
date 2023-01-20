@@ -1,24 +1,32 @@
-language: android
-android:
-  compenents:
-    - build-tools-29.0.3
-    - android-29
-    - extra-android-m2repository
-    - extra-android-support
+name: IRbady CI
 
-before_install:
-  - chmod +x gradlew
-  - curl https://gist.githubusercontent.com/noamtamim/b04ef67239d2b43638aa5a9a024a1937/raw/56f1a38dd88a3774b71a063822444f3961d61873/android-sdk-license.sh | sh
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
-script:
-  - ./gradlew assembleRelease
-  - cp ./app/build/outputs/apk/release/app-release.apk ./IRbaby.apk
+jobs:
+  build:
 
-deploy:
-  provider: releases
-  api_key: "$TOKEN"
-  file: ./IRbaby.apk
-  skip_cleanup: true
-  on:
-    tags: true
-    all_branches: true
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: set up JDK 11
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+          distribution: 'adopt'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew assembleRelease
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: upload-apk
+          path: |
+            ${{github.workspace}}/app/build/outputs/apk/tencent/release/*.apk
+            ${{github.workspace}}/app/build/outputs/apk/xiaomi/release/*.apk
